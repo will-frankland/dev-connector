@@ -11,6 +11,12 @@ class Register extends Component {
       password2: '',
       errors: {}
     }
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -26,7 +32,8 @@ class Register extends Component {
             type="text"
             placeholder="Name"
             name="name"
-            value={null}
+            value={this.state.name}
+            onChange={this.onChange}
           />
         </div>
         <div className="form-group">
@@ -34,8 +41,8 @@ class Register extends Component {
             type="email"
             placeholder="Email Address"
             name="email"
-            value={null}
-
+            value={this.state.email}
+            onChange={this.onChange}
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -47,8 +54,8 @@ class Register extends Component {
             type="password"
             placeholder="Password"
             name="password"
-            value={null}
-            onChange={null}
+            value={this.state.password}
+            onChange={this.onChange}
           />
         </div>
         <div className="form-group">
@@ -56,8 +63,8 @@ class Register extends Component {
             type="password"
             placeholder="Confirm Password"
             name="password2"
-            value={null}
-            onChange={null}
+            value={this.state.password2}
+            onChange={this.onChange}
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
