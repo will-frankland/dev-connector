@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from '../../actions/auth';
+import { connect } from 'react-redux';
+import classnames from 'classnames';
+import { Link, Navigate } from 'react-router-dom';
+import { loginUser } from '../../actions/authActions';
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  componentWillReceiveProps() {
+    if(nextProps.errors) {
+      this.setState({ nextProps.errors });
+    }
+  }
 
   const { email, password } = formData;
 
@@ -23,6 +30,8 @@ const Login = ({ login, isAuthenticated }) => {
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
+  
+  const { errors } = this.state;
 
   return (
     <section className="container">
@@ -34,21 +43,33 @@ const Login = ({ login, isAuthenticated }) => {
         <div className="form-group">
           <input
             type="email"
+            className={classnames('form-control form-control-lg', {
+              'is-invalid': errors.email
+            })}
             placeholder="Email Address"
             name="email"
             value={email}
             onChange={onChange}
           />
+          {errors.email && (
+            <div className='invalid-feedback'>{errors.email}</div>
+          )}
         </div>
         <div className="form-group">
           <input
             type="password"
+            className={classnames('form-control form-control-lg', {
+              'is-invalid': errors.passsword
+            })}
             placeholder="Password"
             name="password"
             value={password}
             onChange={onChange}
             minLength="6"
           />
+          {errors.password && (
+            <div className='invalid-feedback'>{errors.password}</div>
+          )}
         </div>
         <input type="submit" className="btn btn-primary" value="Login" />
       </form>
@@ -60,12 +81,14 @@ const Login = ({ login, isAuthenticated }) => {
 };
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth,
+  errors: state.errors
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { loginUser })(Login);
