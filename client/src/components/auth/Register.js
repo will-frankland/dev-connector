@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -35,8 +36,13 @@ class Register extends Component {
   }
 
   render() {
+    const { errors } = this.state;
+    const { user } = this.props.auth;
+
+
     return (
       <section className="container">
+        {user ? user.name : null}
       <h1 className="large text-primary">Sign Up</h1>
       <p className="lead">
         <i className="fas fa-user" /> Create Your Account
@@ -92,4 +98,13 @@ class Register extends Component {
   }
 }
 
-export default connect(null, { registerUser }) (Register);
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({ 
+  auth: state.auth
+ });
+
+export default connect(mapStateToProps, { registerUser }) (Register);
